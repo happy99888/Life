@@ -32,11 +32,11 @@ const char LIVE_CELL = 'X';
 
 
 // Prototypes
-void CopyBoard(char dest[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE],      char src[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE],       int rows,  int cols);
-bool ReadGen  (char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], istream &is,                                    int &rows, int &cols, int &gen);
-void PrintRow (char lifeBoard[MAX_ARRAY_SIZE],                 ostream &os,                                               int cols);
-void PrintGen (char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], ostream &os,                                    int rows,  int cols);
-void NextGen  (char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE],                                                 int rows,  int cols);
+void CopyBoard(char dest[][MAX_ARRAY_SIZE],      char src[][MAX_ARRAY_SIZE],                     int rows,  int cols);
+bool ReadGen  (char lifeBoard[][MAX_ARRAY_SIZE], istream &is,                                    int &rows, int &cols, int &gen);
+void PrintRow (char lifeBoard[MAX_ARRAY_SIZE],   ostream &os,                                               int cols);
+void PrintGen (char lifeBoard[][MAX_ARRAY_SIZE], ostream &os,                                    int rows,  int cols);
+void NextGen  (char lifeBoard[][MAX_ARRAY_SIZE],                                                 int rows,  int cols);
 
 
 // Main
@@ -128,7 +128,7 @@ int main()
 
 
 // Copies src board and writes it into dest board.
-void CopyBoard(char dest[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], char src[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int rows, int cols)
+void CopyBoard(char dest[][MAX_ARRAY_SIZE], char src[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int rows, int cols)
 {
 	for(int j = 0; j < rows; ++j)
 	{
@@ -141,7 +141,7 @@ void CopyBoard(char dest[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], char src[MAX_ARRAY_SIZ
 
 
 // Reads number parameters and board from given stream and checks to ensure original board conforms to expected standards.
-bool ReadGen(char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], istream &is, int &rows, int &cols, int &gen)
+bool ReadGen(char lifeBoard[][MAX_ARRAY_SIZE], istream &is, int &rows, int &cols, int &gen)
 {
 	// Checks to ensure validity of number parameters in file
 	if(!(is >> rows))
@@ -257,7 +257,7 @@ void PrintRow(char lifeBoard[MAX_ARRAY_SIZE], ostream &os, int cols)
 
 
 // Outputs board to stream.
-void PrintGen(char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], ostream &os, int rows, int cols)
+void PrintGen(char lifeBoard[][MAX_ARRAY_SIZE], ostream &os, int rows, int cols)
 {
 	for(int j = 0; j < (rows - 1); ++j)
 	{
@@ -270,12 +270,9 @@ void PrintGen(char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], ostream &os, int r
 
 
 // Calculates next board
-void NextGen(char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int rows, int cols)
+void NextGen(char lifeBoard[][MAX_ARRAY_SIZE], int rows, int cols)
 {
 	static char nextBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE] = {DEAD_CELL};
-
-	// Copy data nextBoard = lifeBoard
-	CopyBoard(nextBoard, lifeBoard, rows, cols);
 
 	for(int j = 1; j < (rows - 1); ++j) 
 	{
