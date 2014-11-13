@@ -36,7 +36,7 @@ void CopyBoard(char dest[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE],      char src[MAX_ARRA
 bool ReadGen  (char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], istream &is,                                    int &rows, int &cols, int &gen);
 void PrintRow (char lifeBoard[MAX_ARRAY_SIZE],                 ostream &os,                                               int cols);
 void PrintGen (char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], ostream &os,                                    int rows,  int cols);
-void NextGen  (char nextBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], char currBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int rows,  int cols);
+void NextGen  (char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE],                                                 int rows,  int cols);
 
 
 // Main
@@ -44,8 +44,7 @@ int main()
 {
 	// Variables
 	char initBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE] = {DEAD_CELL};  // initial array
-	char currBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE] = {DEAD_CELL};  // working array
-	char nextBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE] = {DEAD_CELL};  // next array
+	char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE] = {DEAD_CELL};  // working array
 
 	string inputFilename = "";
 	string outputFilename = "";
@@ -101,25 +100,22 @@ int main()
 	outputFile << endl;
 
 	// Copy initial board into current board
-	CopyBoard(currBoard, initBoard, rows, cols);
+	CopyBoard(lifeBoard, initBoard, rows, cols);
 
 	// Loop through each generation
 	for(int n = 0; n < gen; ++n)
 	{
 		// Calculate next generation
-		NextGen(nextBoard, currBoard, rows, cols);
-
-		// Copy currBoard = nextBoard
-		CopyBoard(currBoard, nextBoard, rows, cols);
+		NextGen(lifeBoard, rows, cols);
 
 		// Output new generation to cout
 		cout << "\n\n\n" << "gameboard: generation " << (n + 1) << endl;
-		PrintGen(currBoard, cout, rows, cols);
+		PrintGen(lifeBoard, cout, rows, cols);
 		cout << endl;
 
 		// Output new generation to outputFile
 		outputFile << "\n\n\n" << "gameboard: generation " << (n + 1) << endl;
-		PrintGen(currBoard, outputFile, rows, cols);
+		PrintGen(lifeBoard, outputFile, rows, cols);
 		outputFile << endl;
 	}
 
@@ -273,78 +269,65 @@ void PrintGen(char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], ostream &os, int r
 }
 
 
-/*
-http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
-
-The universe of the Game of Life is an infinite two-dimensional orthogonal grid of square cells, each of which is in one of two possible states,
-alive or dead. Every cell interacts with its eight neighbours, which are the cells that are horizontally, vertically, or diagonally adjacent.
-At each step in time, the following transitions occur:
-
-    Any live cell with fewer than two live neighbours dies, as if caused by under-population.
-    Any live cell with two or three live neighbours lives on to the next generation.
-    Any live cell with more than three live neighbours dies, as if by overcrowding.
-    Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
-
-The initial pattern constitutes the seed of the system.
-The first generation is created by applying the above rules simultaneously to every cell in the seed—births and deaths occur simultaneously,
-and the discrete moment at which this happens is sometimes called a tick (in other words, each generation is a pure function of the preceding one).
-The rules continue to be applied repeatedly to create further generations.
-*/
-
 // Calculates next board
-void NextGen(char nextBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], char currBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int rows, int cols)
+void NextGen(char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int rows, int cols)
 {
-	for(int j = 1; j < (rows - 1); j++) 
+	static char nextBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE] = {DEAD_CELL};
+
+	// Copy data nextBoard = lifeBoard
+	CopyBoard(nextBoard, lifeBoard, rows, cols);
+
+	for(int j = 1; j < (rows - 1); ++j) 
 	{
-		for(int i = 1; i < (cols - 1); i++)
+		for(int i = 1; i < (cols - 1); ++i)
 		{
 			int counter = 0;
 
 			// Count number of alive neighbors
 
-			if(currBoard[j + 1][i + 1] == LIVE_CELL)
+			if(lifeBoard[j + 1][i + 1] == LIVE_CELL)
 			{
 				counter++;
 			}
 
-			if(currBoard[j + 1][i] == LIVE_CELL)
+			if(lifeBoard[j + 1][i] == LIVE_CELL)
 			{
 				counter++;
 			}
 
-			if(currBoard[j + 1][i - 1] == LIVE_CELL)
+			if(lifeBoard[j + 1][i - 1] == LIVE_CELL)
 			{
 				counter++;
 			}
 
-			if(currBoard[j][i - 1] == LIVE_CELL)
+			if(lifeBoard[j][i - 1] == LIVE_CELL)
 			{
 				counter++;
 			}
 
-			if(currBoard[j][i + 1] == LIVE_CELL)
+			if(lifeBoard[j][i + 1] == LIVE_CELL)
 			{
 				counter++;
 			}
 
-			if(currBoard[j - 1][i - 1] == LIVE_CELL)
+			if(lifeBoard[j - 1][i - 1] == LIVE_CELL)
 			{
 				counter++;
 			}
 
-			if(currBoard[j - 1][i] == LIVE_CELL)
+			if(lifeBoard[j - 1][i] == LIVE_CELL)
 			{
 				counter++;
 			}
 
-			if(currBoard[j - 1][i + 1] == LIVE_CELL)
+			if(lifeBoard[j - 1][i + 1] == LIVE_CELL)
 			{
 				counter++;
 			}
 			
 			// Determine if next generation is alive or dead based on number of neighbors
 
-			if(currBoard[j][i] == LIVE_CELL)
+			if(lifeBoard[j][i] == LIVE_CELL)
 			{
 				// Death by Overcrowding
 				if(counter >= 4)
@@ -363,7 +346,7 @@ void NextGen(char nextBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], char currBoard[MAX_
 					nextBoard[j][i] = LIVE_CELL;
 				}
 			}
-			else if(currBoard[j][i] == DEAD_CELL)
+			else if(lifeBoard[j][i] == DEAD_CELL)
 			{
 				// Birth
 				if(counter == 3)
@@ -391,5 +374,8 @@ void NextGen(char nextBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], char currBoard[MAX_
 		nextBoard[0][i] = DEAD_CELL;        // top row
 		nextBoard[rows - 1][i] = DEAD_CELL; // bottom row
 	}
+
+	// Copy data lifeBoard = nextBoard
+	CopyBoard(lifeBoard, nextBoard, rows, cols);
 }
 
