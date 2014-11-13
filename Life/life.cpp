@@ -33,7 +33,7 @@ const char LIVE_CELL = 'X';
 
 // Prototypes
 void CopyBoard(char dest[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE],      char src[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE],       int rows,  int cols);
-void ReadGen  (char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], istream &is,                                    int &rows, int &cols, int &gen);
+bool ReadGen  (char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], istream &is,                                    int &rows, int &cols, int &gen);
 void PrintRow (char lifeBoard[MAX_ARRAY_SIZE],                 ostream &os,                                               int cols);
 void PrintGen (char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], ostream &os,                                    int rows,  int cols);
 void NextGen  (char nextBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], char currBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int rows,  int cols);
@@ -78,11 +78,18 @@ int main()
 	if(outputFile.fail())
 	{
 		cerr << "ERROR: output file not opened correctly" << endl;
+		inputFile.close();
 		return 2;
 	}
 
 	// Read from file
-	ReadGen(initBoard, inputFile, rows, cols, gen);
+	if(ReadGen(initBoard, inputFile, rows, cols, gen))
+	{
+		// Error happened! End program.
+		inputFile.close();
+		outputFile.close();
+		return 3;
+	}
 
 	// Output initial board
 	cout << "initial game board\n" << endl;
@@ -138,43 +145,43 @@ void CopyBoard(char dest[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], char src[MAX_ARRAY_SIZ
 
 
 // Reads number parameters and board from given stream and checks to ensure original board conforms to expected standards.
-void ReadGen(char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], istream &is, int &rows, int &cols, int &gen)
+bool ReadGen(char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], istream &is, int &rows, int &cols, int &gen)
 {
 	// Checks to ensure validity of number parameters in file
 	if(!(is >> rows))
 	{
 		cerr << "ERROR: Cannot read number of rows";
-		return;
+		return 1;
 	}
 
 	if((rows <= MIN_ARRAY_SIZE) || (rows >= MAX_ARRAY_SIZE))
 	{
 		cerr << "ERROR: Read an illegal number of rows for the board";
-		return;
+		return 1;
 	}
 
 	if(!(is >> cols))
 	{
 		cerr << "ERROR: Cannot read number of columns";
-		return;
+		return 1;
 	}
 
 	if((cols <= MIN_ARRAY_SIZE) || (cols >= MAX_ARRAY_SIZE))
 	{
 		cerr << "ERROR: Read an illegal number of columns for the board";
-		return;
+		return 1;
 	}
 
 	if(!(is >> gen))
 	{
 		cerr << "ERROR: Cannot read the number of generations";
-		return;
+		return 1;
 	}
 
 	if(gen < MIN_GENERATIONS)
 	{
 		cerr << "ERROR: Read an illegal number of generations";
-		return;
+		return 1;
 	}
 
 	// Build array
@@ -188,7 +195,7 @@ void ReadGen(char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], istream &is, int &r
 				if(!(is >> lifeBoard[j][i]))
 				{
 					cerr << "ERROR: Not enough data in the input file";
-					return;
+					return 1;
 				}
 			} while((lifeBoard[j][i] == ' ') || (lifeBoard[j][i] == '\t'));
 
@@ -197,7 +204,7 @@ void ReadGen(char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], istream &is, int &r
 			{
 				cerr << "ERROR: Input data for initial board is incorrect" << endl;
 				cerr << "Location (" << j << ", " << i << ") is not valid";
-				return;
+				return 1;
 			}
 		}
 	}
@@ -209,14 +216,14 @@ void ReadGen(char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], istream &is, int &r
 		if(lifeBoard[j][0] != DEAD_CELL)
 		{
 			cerr << "ERROR: organisms are present in the border of the board, please correct your input file";
-			return;
+			return 1;
 		}
 
 		// Right column
 		if(lifeBoard[j][cols - 1] != DEAD_CELL)
 		{
 			cerr << "ERROR: organisms are present in the border of the board, please correct your input file";
-			return;
+			return 1;
 		}
 	}
 
@@ -226,16 +233,18 @@ void ReadGen(char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], istream &is, int &r
 		if(lifeBoard[0][i] != DEAD_CELL)
 		{
 			cerr << "ERROR: organisms are present in the border of the board, please correct your input file";
-			return;
+			return 1;
 		}
 
 		// Bottom row
 		if(lifeBoard[rows - 1][i] != DEAD_CELL)
 		{
 			cerr << "ERROR: organisms are present in the border of the board, please correct your input file";
-			return;
+			return 1;
 		}
 	}
+
+	return 0;
 }
 
 
