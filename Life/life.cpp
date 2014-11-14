@@ -32,18 +32,17 @@ const char LIVE_CELL = 'X';
 
 
 // Prototypes
-void CopyBoard(char dest[][MAX_ARRAY_SIZE],      char src[][MAX_ARRAY_SIZE], int rows,  int cols);
-bool ReadGen  (char lifeBoard[][MAX_ARRAY_SIZE], istream &is,                int &rows, int &cols, int &gen);
-void PrintRow (char lifeRow[MAX_ARRAY_SIZE],     ostream &os,                           int cols);
-void PrintGen (char lifeBoard[][MAX_ARRAY_SIZE], ostream &os,                int rows,  int cols);
-void NextGen  (char lifeBoard[][MAX_ARRAY_SIZE],                             int rows,  int cols);
+bool ReadGen  (char lifeBoard[][MAX_ARRAY_SIZE], istream &inStream,          int &numRowsInBoard, int &numColsInBoard, int &generationNum);
+void NextGen  (char lifeBoard[][MAX_ARRAY_SIZE],                             int numRowsInBoard,  int numColsInBoard);
+void PrintGen (char lifeBoard[][MAX_ARRAY_SIZE], ostream &outStream,         int numRowsInBoard,  int numColsInBoard);
+void PrintRow (char lifeRow[MAX_ARRAY_SIZE],     ostream &outStream,                              int numColsInBoard);
+void CopyBoard(char dest[][MAX_ARRAY_SIZE],      char src[][MAX_ARRAY_SIZE], int numRowsInBoard,  int numColsInBoard);
 
 
 // Main
 int main()
 {
 	// Variables
-	char initBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE] = {DEAD_CELL};  // initial array
 	char lifeBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE] = {DEAD_CELL};  // working array
 
 	string inputFilename = "";
@@ -52,9 +51,9 @@ int main()
 	ifstream inputFile;
 	ofstream outputFile;
 
-	int rows = 0;
-	int cols = 0;
-	int gen = 0;
+	int numRowsInBoard = 0;
+	int numColsInBoard = 0;
+	int generationNum = 0;
 
 	// Ask user for file names
 	cout << "Enter the name of the input file: ";
@@ -82,7 +81,7 @@ int main()
 	}
 
 	// Read from file
-	if(ReadGen(initBoard, inputFile, rows, cols, gen))
+	if(ReadGen(lifeBoard, inputFile, numRowsInBoard, numColsInBoard, generationNum))
 	{
 		// Error happened! End program.
 		inputFile.close();
@@ -92,30 +91,31 @@ int main()
 
 	// Output initial board
 	cout << "LIFE initial game board\n" << endl;
-	PrintGen(initBoard, cout, rows, cols);
+	PrintGen(lifeBoard, cout, numRowsInBoard, numColsInBoard);
 	cout << endl;
 
 	outputFile << "LIFE initial game board\n" << endl;
-	PrintGen(initBoard, outputFile, rows, cols);
+	PrintGen(lifeBoard, outputFile, numRowsInBoard, numColsInBoard);
 	outputFile << endl;
 
-	// Copy initial board into current board
-	CopyBoard(lifeBoard, initBoard, rows, cols);
-
 	// Loop through each generation
-	for(int n = 0; n < gen; ++n)
+	for(int n = 0; n < generationNum; ++n)
 	{
 		// Calculate next generation
-		NextGen(lifeBoard, rows, cols);
+		NextGen(lifeBoard, numRowsInBoard, numColsInBoard);
 
 		// Output new generation to cout
-		cout << "\n\n\n" << "LIFE gameboard: generation " << (n + 1) << endl;
-		PrintGen(lifeBoard, cout, rows, cols);
-		cout << endl;
+		// only for first and last generations
+		if((n == 0) || (n == (generationNum - 1)))
+		{
+			cout << "\n\n\n" << "LIFE gameboard: generation " << (n + 1) << endl;
+			PrintGen(lifeBoard, cout, numRowsInBoard, numColsInBoard);
+			cout << endl;
+		}
 
 		// Output new generation to outputFile
 		outputFile << "\n\n\n" << "LIFE gameboard: generation " << (n + 1) << endl;
-		PrintGen(lifeBoard, outputFile, rows, cols);
+		PrintGen(lifeBoard, outputFile, numRowsInBoard, numColsInBoard);
 		outputFile << endl;
 	}
 
@@ -128,11 +128,11 @@ int main()
 
 
 // Copies src board and writes it into dest board.
-void CopyBoard(char dest[][MAX_ARRAY_SIZE], char src[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int rows, int cols)
+void CopyBoard(char dest[][MAX_ARRAY_SIZE], char src[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int numColsInBoard)
 {
-	for(int j = 0; j < rows; ++j)
+	for(int j = 0; j < numRowsInBoard; ++j)
 	{
-		for(int i = 0; i < cols; ++i)
+		for(int i = 0; i < numColsInBoard; ++i)
 		{
 			dest[j][i] = src[j][i];
 		}
@@ -141,54 +141,54 @@ void CopyBoard(char dest[][MAX_ARRAY_SIZE], char src[MAX_ARRAY_SIZE][MAX_ARRAY_S
 
 
 // Reads number parameters and board from given stream and checks to ensure original board conforms to expected standards.
-bool ReadGen(char lifeBoard[][MAX_ARRAY_SIZE], istream &is, int &rows, int &cols, int &gen)
+bool ReadGen(char lifeBoard[][MAX_ARRAY_SIZE], istream &inStream, int &numRowsInBoard, int &numColsInBoard, int &generationNum)
 {
 	// Checks to ensure validity of number parameters in file
-	if(!(is >> rows))
+	if(!(inStream >> numRowsInBoard))
 	{
-		cerr << "ERROR: Cannot read number of rows";
+		cerr << "ERROR: Cannot read number of numRowsInBoard";
 		return 1;
 	}
 
-	if((rows <= MIN_ARRAY_SIZE) || (rows >= MAX_ARRAY_SIZE))
+	if((numRowsInBoard <= MIN_ARRAY_SIZE) || (numRowsInBoard >= MAX_ARRAY_SIZE))
 	{
-		cerr << "ERROR: Read an illegal number of rows for the board";
+		cerr << "ERROR: Read an illegal number of numRowsInBoard for the board";
 		return 1;
 	}
 
-	if(!(is >> cols))
+	if(!(inStream >> numColsInBoard))
 	{
 		cerr << "ERROR: Cannot read number of columns";
 		return 1;
 	}
 
-	if((cols <= MIN_ARRAY_SIZE) || (cols >= MAX_ARRAY_SIZE))
+	if((numColsInBoard <= MIN_ARRAY_SIZE) || (numColsInBoard >= MAX_ARRAY_SIZE))
 	{
 		cerr << "ERROR: Read an illegal number of columns for the board";
 		return 1;
 	}
 
-	if(!(is >> gen))
+	if(!(inStream >> generationNum))
 	{
 		cerr << "ERROR: Cannot read the number of generations";
 		return 1;
 	}
 
-	if(gen < MIN_GENERATIONS)
+	if(generationNum < MIN_GENERATIONS)
 	{
 		cerr << "ERROR: Read an illegal number of generations";
 		return 1;
 	}
 
 	// Build array
-	for(int j = 0; j < rows; ++j)
+	for(int j = 0; j < numRowsInBoard; ++j)
 	{
-		for(int i = 0; i < cols; ++i)
+		for(int i = 0; i < numColsInBoard; ++i)
 		{
 			// Read next character from file
 			do
 			{
-				if(!(is >> lifeBoard[j][i]))
+				if(!(inStream >> lifeBoard[j][i]))
 				{
 					cerr << "ERROR: Not enough data in the input file";
 					return 1;
@@ -206,7 +206,7 @@ bool ReadGen(char lifeBoard[][MAX_ARRAY_SIZE], istream &is, int &rows, int &cols
 	}
 
 	// Checks to ensure borders of initial board (generation 0) have no live organisms
-	for(int j = 0; j < rows; ++j)
+	for(int j = 0; j < numRowsInBoard; ++j)
 	{
 		// Left column
 		if(lifeBoard[j][0] != DEAD_CELL)
@@ -216,14 +216,14 @@ bool ReadGen(char lifeBoard[][MAX_ARRAY_SIZE], istream &is, int &rows, int &cols
 		}
 
 		// Right column
-		if(lifeBoard[j][cols - 1] != DEAD_CELL)
+		if(lifeBoard[j][numColsInBoard - 1] != DEAD_CELL)
 		{
 			cerr << "ERROR: organisms are present in the border of the board, please correct your input file";
 			return 1;
 		}
 	}
 
-	for(int i = 0; i < cols; ++i)
+	for(int i = 0; i < numColsInBoard; ++i)
 	{
 		// Top row
 		if(lifeBoard[0][i] != DEAD_CELL)
@@ -233,7 +233,7 @@ bool ReadGen(char lifeBoard[][MAX_ARRAY_SIZE], istream &is, int &rows, int &cols
 		}
 
 		// Bottom row
-		if(lifeBoard[rows - 1][i] != DEAD_CELL)
+		if(lifeBoard[numRowsInBoard - 1][i] != DEAD_CELL)
 		{
 			cerr << "ERROR: organisms are present in the border of the board, please correct your input file";
 			return 1;
@@ -245,38 +245,38 @@ bool ReadGen(char lifeBoard[][MAX_ARRAY_SIZE], istream &is, int &rows, int &cols
 
 
 // Outputs row to stream.
-void PrintRow(char lifeRow[MAX_ARRAY_SIZE], ostream &os, int cols)
+void PrintRow(char lifeRow[MAX_ARRAY_SIZE], ostream &outStream, int numColsInBoard)
 {
-	for(int i = 0; i < (cols - 1); ++i)
+	for(int i = 0; i < (numColsInBoard - 1); ++i)
 	{
-		os << lifeRow[i] << ' ';
+		outStream << lifeRow[i] << ' ';
 	}
 
-	os << lifeRow[cols - 1];
+	outStream << lifeRow[numColsInBoard - 1];
 }
 
 
 // Outputs board to stream.
-void PrintGen(char lifeBoard[][MAX_ARRAY_SIZE], ostream &os, int rows, int cols)
+void PrintGen(char lifeBoard[][MAX_ARRAY_SIZE], ostream &outStream, int numRowsInBoard, int numColsInBoard)
 {
-	for(int j = 0; j < (rows - 1); ++j)
+	for(int j = 0; j < (numRowsInBoard - 1); ++j)
 	{
-		PrintRow(lifeBoard[j], os, cols);
-		os << endl;
+		PrintRow(lifeBoard[j], outStream, numColsInBoard);
+		outStream << endl;
 	}
 
-	PrintRow(lifeBoard[rows - 1], os, cols);
+	PrintRow(lifeBoard[numRowsInBoard - 1], outStream, numColsInBoard);
 }
 
 
 // Calculates next board
-void NextGen(char lifeBoard[][MAX_ARRAY_SIZE], int rows, int cols)
+void NextGen(char lifeBoard[][MAX_ARRAY_SIZE], int numRowsInBoard, int numColsInBoard)
 {
 	static char nextBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE] = {DEAD_CELL};
 
-	for(int j = 1; j < (rows - 1); ++j) 
+	for(int j = 1; j < (numRowsInBoard - 1); ++j) 
 	{
-		for(int i = 1; i < (cols - 1); ++i)
+		for(int i = 1; i < (numColsInBoard - 1); ++i)
 		{
 			int counter = 0;
 
@@ -360,19 +360,19 @@ void NextGen(char lifeBoard[][MAX_ARRAY_SIZE], int rows, int cols)
 	}
 
 	// Fill borders with DEAD_CELL
-	for(int j = 0; j < rows; j++)
+	for(int j = 0; j < numRowsInBoard; j++)
 	{
 		nextBoard[j][0] = DEAD_CELL;        // left column
-		nextBoard[j][cols - 1] = DEAD_CELL; // right column
+		nextBoard[j][numColsInBoard - 1] = DEAD_CELL; // right column
 	}
 
-	for(int i = 0; i < cols; i++)
+	for(int i = 0; i < numColsInBoard; i++)
 	{
 		nextBoard[0][i] = DEAD_CELL;        // top row
-		nextBoard[rows - 1][i] = DEAD_CELL; // bottom row
+		nextBoard[numRowsInBoard - 1][i] = DEAD_CELL; // bottom row
 	}
 
 	// Copy data lifeBoard = nextBoard
-	CopyBoard(lifeBoard, nextBoard, rows, cols);
+	CopyBoard(lifeBoard, nextBoard, numRowsInBoard, numColsInBoard);
 }
 
