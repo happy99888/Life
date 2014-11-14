@@ -1,4 +1,4 @@
-﻿initial game board
+﻿LIFE initial game board
 
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . . . . . . . . . . . X X X . . . . . . . X . .
@@ -21,7 +21,7 @@
 
 
 
-gameboard: generation 1
+LIFE gameboard: generation 1
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . . . . . . . . . . . X X X . . . . . . . . . .
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . X X X .
@@ -43,7 +43,7 @@ gameboard: generation 1
 
 
 
-gameboard: generation 2
+LIFE gameboard: generation 2
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . . . . . . . . . . . . X . . . . . . . . X . .
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . X . X .
@@ -65,7 +65,7 @@ gameboard: generation 2
 
 
 
-gameboard: generation 3
+LIFE gameboard: generation 3
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . X . .
 . . . . . . . . . . . . . . . . X . . . . . . . . X . X . . . . . . X X . .
@@ -87,7 +87,7 @@ gameboard: generation 3
 
 
 
-gameboard: generation 4
+LIFE gameboard: generation 4
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . X X . .
 . . . . . . . . . . . . . . . . X . . . . . . . . . . . . . . . . X . X . .
@@ -109,7 +109,7 @@ gameboard: generation 4
 
 
 
-gameboard: generation 5
+LIFE gameboard: generation 5
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . X X . .
 . . . . . . . . . . . . . . . X X X . . . . . . . . . . . . . . . X . X . .
@@ -131,7 +131,7 @@ gameboard: generation 5
 
 
 
-gameboard: generation 6
+LIFE gameboard: generation 6
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . . X . . . . . . . . . . . . . . . . . X X . .
 . . . . . . . . . . . . . . . X X X . . . . . . . . . . . . . . X X . X . .
@@ -153,7 +153,7 @@ gameboard: generation 6
 
 
 
-gameboard: generation 7
+LIFE gameboard: generation 7
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . X X X . . . . . . . . . . . . . . . X X X . .
 . . . . . . . . . . . . . . . X X X . . . . . . . . . . . . . . X . . X . .
@@ -175,7 +175,7 @@ gameboard: generation 7
 
 
 
-gameboard: generation 8
+LIFE gameboard: generation 8
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . X . X . . . . . . . . . . . . . . . X X X . .
 . . . . . . . . . . . . . . X . . . X . . . . . . . . . . . . . X X . X . .
@@ -197,7 +197,7 @@ gameboard: generation 8
 
 
 
-gameboard: generation 9
+LIFE gameboard: generation 9
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . X X . X . .
 . . . . . . . . . . . . . X X . X . X X . . . . . . . . . . . X . . . X . .
@@ -219,7 +219,7 @@ gameboard: generation 9
 
 
 
-gameboard: generation 10
+LIFE gameboard: generation 10
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . X . X . . .
 . . . . . . . . . . . . . X . . X . . X . . . . . . . . . . . X . . X . . .
@@ -241,7 +241,7 @@ gameboard: generation 10
 
 
 
-gameboard: generation 11
+LIFE gameboard: generation 11
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . X . . . .
 . . . . . . . . . . . . . . . X X X . . . . . . . . . . . . X . . . . . . .
@@ -263,7 +263,7 @@ gameboard: generation 11
 
 
 
-gameboard: generation 12
+LIFE gameboard: generation 12
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . . X . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . X X . X X . . . . . X . . . . . . . . . . . . .
@@ -285,7 +285,7 @@ gameboard: generation 12
 
 
 
-gameboard: generation 13
+LIFE gameboard: generation 13
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . X X X . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . X X X X X . . . . X X . . . . . . . . . . . . .
@@ -307,7 +307,7 @@ gameboard: generation 13
 
 
 
-gameboard: generation 14
+LIFE gameboard: generation 14
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . X . . . X . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . X . . . . . X . . . X X . . . . . . . . . . . . .
@@ -329,7 +329,7 @@ gameboard: generation 14
 
 
 
-gameboard: generation 15
+LIFE gameboard: generation 15
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . X X . . . X X X . X X X . . . . . . . . . . . . .
