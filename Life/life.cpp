@@ -5,7 +5,7 @@
 //     Dayton Pukanich, 301252869, <dpukanic@sfu.ca>
 
 // Start Date: 4 November 2014
-// Completion Date: 7 November 2014
+// Completion Date: 13 November 2014
 
 // Description: Computer simulation of Conway's Game of Life using an original board contained in a data file specified by the user.
 
@@ -27,8 +27,13 @@ using namespace std;
 const int MIN_ARRAY_SIZE = 0;
 const int MAX_ARRAY_SIZE = 40;
 const int MIN_GENERATIONS = 1;
+
 const char DEAD_CELL = '.';
 const char LIVE_CELL = 'X';
+
+const int NEIGHBORS_OVERCROWDING = 4;  // Too many neighbors
+const int NEIGHBORS_LONELINESS = 2;    // Too few neighbors
+const int NEIGHBORS_BIRTH = 3;         // Enough neighbors
 
 
 // Prototypes
@@ -273,12 +278,14 @@ void PrintGen(char lifeBoard[][MAX_ARRAY_SIZE], ostream &outStream, int numRowsI
 void NextGen(char lifeBoard[][MAX_ARRAY_SIZE], int numRowsInBoard, int numColsInBoard)
 {
 	static char nextBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE] = {DEAD_CELL};
+	int counter = 0;
 
-	for(int j = 1; j < (numRowsInBoard - 1); ++j) 
+	for(int j = 1; j < (numRowsInBoard - 1); ++j)
 	{
 		for(int i = 1; i < (numColsInBoard - 1); ++i)
 		{
-			int counter = 0;
+			// Reset counter
+			counter = 0;
 
 			// Count number of alive neighbors
 
@@ -327,12 +334,12 @@ void NextGen(char lifeBoard[][MAX_ARRAY_SIZE], int numRowsInBoard, int numColsIn
 			if(lifeBoard[j][i] == LIVE_CELL)
 			{
 				// Death by Overcrowding
-				if(counter >= 4)
+				if(counter >= NEIGHBORS_OVERCROWDING)
 				{
 					nextBoard[j][i] = DEAD_CELL;
 				}
 				// Death by Loneliness
-				else if(counter < 2)
+				else if(counter < NEIGHBORS_LONELINESS)
 				{
 					nextBoard[j][i] = DEAD_CELL;
 				}
@@ -346,7 +353,7 @@ void NextGen(char lifeBoard[][MAX_ARRAY_SIZE], int numRowsInBoard, int numColsIn
 			else if(lifeBoard[j][i] == DEAD_CELL)
 			{
 				// Birth
-				if(counter == 3)
+				if(counter == NEIGHBORS_BIRTH)
 				{
 					nextBoard[j][i] = LIVE_CELL;
 				}
