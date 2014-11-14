@@ -1,5 +1,5 @@
 // Authors:
-//     Mateen Ulhaq,    301250828, <mulhaq@sfu.ca>,
+//     Mateen Ulhaq,    301250828, <mulhaq@sfu.ca>
 //     Greyson Wang,    301249759, <greysonw@sfu.ca>
 //     Kismen Sneddon,  301265599, <ksneddon@sfu.ca>
 //     Dayton Pukanich, 301252869, <dpukanic@sfu.ca>
@@ -32,11 +32,11 @@ const char LIVE_CELL = 'X';
 
 
 // Prototypes
-void CopyBoard(char dest[][MAX_ARRAY_SIZE],      char src[][MAX_ARRAY_SIZE],                     int rows,  int cols);
-bool ReadGen  (char lifeBoard[][MAX_ARRAY_SIZE], istream &is,                                    int &rows, int &cols, int &gen);
-void PrintRow (char lifeBoard[MAX_ARRAY_SIZE],   ostream &os,                                               int cols);
-void PrintGen (char lifeBoard[][MAX_ARRAY_SIZE], ostream &os,                                    int rows,  int cols);
-void NextGen  (char lifeBoard[][MAX_ARRAY_SIZE],                                                 int rows,  int cols);
+void CopyBoard(char dest[][MAX_ARRAY_SIZE],      char src[][MAX_ARRAY_SIZE], int rows,  int cols);
+bool ReadGen  (char lifeBoard[][MAX_ARRAY_SIZE], istream &is,                int &rows, int &cols, int &gen);
+void PrintRow (char lifeRow[MAX_ARRAY_SIZE],     ostream &os,                           int cols);
+void PrintGen (char lifeBoard[][MAX_ARRAY_SIZE], ostream &os,                int rows,  int cols);
+void NextGen  (char lifeBoard[][MAX_ARRAY_SIZE],                             int rows,  int cols);
 
 
 // Main
@@ -91,11 +91,11 @@ int main()
 	}
 
 	// Output initial board
-	cout << "initial game board\n" << endl;
+	cout << "LIFE initial game board\n" << endl;
 	PrintGen(initBoard, cout, rows, cols);
 	cout << endl;
 
-	outputFile << "initial game board\n" << endl;
+	outputFile << "LIFE initial game board\n" << endl;
 	PrintGen(initBoard, outputFile, rows, cols);
 	outputFile << endl;
 
@@ -109,12 +109,12 @@ int main()
 		NextGen(lifeBoard, rows, cols);
 
 		// Output new generation to cout
-		cout << "\n\n\n" << "gameboard: generation " << (n + 1) << endl;
+		cout << "\n\n\n" << "LIFE gameboard: generation " << (n + 1) << endl;
 		PrintGen(lifeBoard, cout, rows, cols);
 		cout << endl;
 
 		// Output new generation to outputFile
-		outputFile << "\n\n\n" << "gameboard: generation " << (n + 1) << endl;
+		outputFile << "\n\n\n" << "LIFE gameboard: generation " << (n + 1) << endl;
 		PrintGen(lifeBoard, outputFile, rows, cols);
 		outputFile << endl;
 	}
@@ -245,14 +245,14 @@ bool ReadGen(char lifeBoard[][MAX_ARRAY_SIZE], istream &is, int &rows, int &cols
 
 
 // Outputs row to stream.
-void PrintRow(char lifeBoard[MAX_ARRAY_SIZE], ostream &os, int cols)
+void PrintRow(char lifeRow[MAX_ARRAY_SIZE], ostream &os, int cols)
 {
 	for(int i = 0; i < (cols - 1); ++i)
 	{
-		os << lifeBoard[i] << ' ';
+		os << lifeRow[i] << ' ';
 	}
 
-	os << lifeBoard[cols - 1];
+	os << lifeRow[cols - 1];
 }
 
 
